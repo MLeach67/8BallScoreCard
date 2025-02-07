@@ -20,6 +20,7 @@ const Index = () => {
     const [p1Def, setP1Def] = useState(0);
     const [p1Timeout, setP1Timeout] = useState(2);
 	const [p1Active, setP1Active] = useState(true);
+	const [p1Balls, setP1Balls] = useState('Open');
 
     const [p2Name, setP2Name] = useState('Player2');
     const [p2Skill, setP2Skill] = useState('2');
@@ -28,6 +29,7 @@ const Index = () => {
     const [p2Def, setP2Def] = useState(0);
     const [p2Timeout, setP2Timeout] = useState('2');
 	const [p2Active, setP2Active] = useState(false);
+	const [p2Balls, setP2Balls] = useState('Open');
 
 	const [innings, setInnings] = useState(0);
 	const [rackInns, setRackInns] = useState(0);
@@ -168,6 +170,18 @@ const Index = () => {
         }
     };
 
+    const toggleBalls = () => {
+        if (p1Balls === 'Open') {
+            setP1Balls('Solids');
+            setP2Balls('Stripes');
+        } else if (p1Balls === 'Solids') {
+            setP1Balls('Stripes');
+            setP2Balls('Solids');
+        } else {
+            setP1Balls('Solids');
+            setP2Balls('Stripes');
+        }
+    };
 
   const resetTimeouts = () => {
       p1Skill < 4 ? setP1Timeout(2) : setP1Timeout(1);
@@ -212,6 +226,7 @@ const Index = () => {
 	setP1Score(0);
 	setP1Def(0);
     setP1Timeout(2);
+    setP1Balls('Open');
 
     setP2Name('Player2');
     setP2Skill('2');
@@ -220,7 +235,7 @@ const Index = () => {
     setP2Active(false);
     setP2Def(0);
     setP2Timeout(2);
-
+    setP2Balls('Open');
 
     setP1BandR(0);
     setP1Snap(0);
@@ -291,6 +306,8 @@ const Index = () => {
                 }
       }
       setRackInns(0);
+      setP1Balls('Open')
+      setP2Balls('Open')
       if (buzz === 'BuzzOff') Vibration.vibrate(100);
       }
   };
@@ -336,7 +353,7 @@ const Index = () => {
     useEffect(() => {
         setP1Goal(getGoal(p1Skill, p2Skill));
         setP2Goal(getGoal(p2Skill, p1Skill));
-        },[p1Skill, p1Goal, p1Skill, p2Goal]);
+        },[p1Skill, p1Goal, p2Skill, p2Goal]);
 
     return (
       <View style={styles.main}>
@@ -460,6 +477,12 @@ const Index = () => {
               </View>
           </View>
           <View style={styles.row4}>
+              <View style={styles.deadtotal}>
+                  <Pressable onPress={toggleBalls}>
+                      <Text style={{ fontSize: 18}}>P1: {p1Balls}</Text>
+                  </Pressable>
+              </View>
+
               <View style={styles.dead}>
                 <Text style={{ fontSize: 18}}>R-Inn: {rackInns}</Text>
               </View>
@@ -471,6 +494,12 @@ const Index = () => {
                   <Pressable onPress={navToInnings}>
                 <Text style={{ fontSize: 18}}>{innings}</Text>
             	</Pressable>
+              </View>
+
+              <View style={styles.deadtotal}>
+                  <Pressable onPress={toggleBalls}>
+                      <Text style={{ fontSize: 18}}>P2: {p2Balls}</Text>
+                  </Pressable>
               </View>
 
           </View>
